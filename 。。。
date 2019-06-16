@@ -1,0 +1,243 @@
+SKILL_MESSAGE_H_
+#define _SKILL_MESSAGE_H_
+#include <string>
+using namespace std;
+class SkillMessage{
+public:
+	int id;<span style="white-space:pre">	</span>
+	string name;<span style="white-space:pre">	</span>
+	string desc;<span style="white-space:pre">	</span>
+	string icon;<span style="white-space:pre">	</span>
+	int begin_e;<span style="white-space:pre">	</span>
+	int state_e;<span style="white-space:pre">	</span>
+	int hit_e;<span style="white-space:pre">	</span>
+	int lastTime;<span style="white-space:pre">	</span>
+	int cd;<span style="white-space:pre">	</span>
+	string skill_bullet_img;<span style="white-space:pre">	</span>
+};
+#endif
+
+
+class EffectUtil{
+public:
+	static EffectUtil* getInstance();
+	Animate* getSkillEffectById(int id,int loop=1);
+
+private:
+	static EffectUtil* m_instance;
+};//获取动画
+
+Animate*  EffectUtil::getSkillEffectById(int id,int loop){
+	SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFramesWithFile(String::createWithFormat("Skill/Effect/%d.plist",id)->getCString(),
+		String::createWithFormat("Skill/Effect/%d.png",id)->getCString());
+	SpriteFrame* temp;
+	Vector<SpriteFrame*> v;
+	int index = 1;
+	do{
+		CCLOG("INDEX = %d",index);
+		temp = cache->getSpriteFrameByName(String::createWithFormat("%d_%d.png",id,index)->getCString());
+		index++;
+		if(temp == nullptr){
+			break;
+		}else{
+			v.pushBack(temp);
+		}
+	}while(true);
+
+	Animation* animation = Animation::createWithSpriteFrames(v);
+	animation->setLoops(loop);
+	animation->setDelayPerUnit(0.1f);
+	Animate* ret = Animate::create(animation);
+	return ret;
+}
+
+class Skill : public Node{
+public:
+    bool init(Hero* h);
+	static Skill* create(Hero* h);
+	void onTouchDown(Ref* pSender,ui::TouchEventType type);
+	Hero* getHero();
+private:
+	ui::Button* skillIcon;
+	Hero* m_hero;
+};//添加技能框    
+
+Skill* Skill::create(Hero* h){
+	Skill* skill = new Skill();
+	if(skill && skill->init(h)){
+		skill->autorelease();
+		return skill;
+	}else{
+		CC_SAFE_DELETE(skill);
+		return nullptr;
+	}
+}
+
+bool Skill::init(Hero* h){
+	m_hero = h;
+	skillIcon = ui::Button::create("Skill/" + h->getSkill().icon);
+	skillIcon->addTouchEventListener(this,toucheventselector(Skill::onTouchDown));
+	this->addChild(skillIcon);
+	return true;
+}//需要的英雄类参数
+
+void  Skill::onTouchDown(Ref* pSender,ui::TouchEventType type){
+	if(type == TouchEventType::TOUCH_EVENT_BEGAN){
+	<span style="white-space:pre">	</span>m_hero->skill();
+	}
+}//调用英雄接口
+
+bool FlightLayer::init(){
+	this->scheduleUpdate();
+	initListener();
+	m_cur_controlPtr = nullptr;
+	m_cur_control = nullptr;
+	m_skill = nullptr;
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Sprite* BG = Sprite::create("flightBG.jpg");
+	BG->setAnchorPoint(Point(0.5f,0.5f));
+	BG->setPosition(visibleSize.width/2,visibleSize.height/2);
+	this->addChild(BG);
+	m_skill = nullptr;
+
+
+	return true;
+}
+
+void FlightLayer::updateSkill(){
+	if(m_cur_control==nullptr){<span style="white-space:pre">	</span>
+		if(m_skill){<span style="white-space:pre">			</span>
+			m_skill->removeFromParentAndCleanup(true);
+			m_skill = nullptr;
+		}
+	}
+	if(m_skill == nullptr){<span style="white-space:pre">	</span>
+		if(m_cur_control){<span style="white-space:pre">	</span>
+			Hero* h = dynamic_cast<Hero*>(m_cur_control);
+			m_skill = Skill::create(h);
+			m_skill->setPosition(50,650);
+			addChild(m_skill,4);
+		}
+	}else{<span style="white-space:pre">			</span>
+		if(m_cur_control){<span style="white-space:pre">	</span>
+			if(m_cur_control != m_skill->getHero()){
+				m_skill->removeFromParentAndCleanup(true);
+				m_skill = nullptr;
+			}
+		}
+	}
+}
+
+void Hero::skill(){ 
+SkillImpl impl; 
+impl.runSkill(m_skill.id,this); 
+}//skill接口的实现
+
+#ifndef _SKILL_IMPL_
+#define _SKILL_IMPL_
+class Hero;
+class SkillImpl{
+public:
+	void runSkill(int id,Hero* hero);
+};
+#endif// SkillImp是什么
+
+
+void SkillImpl::runSkill(int id,Hero* hero){
+	switch(id){
+	case 4001://skill_kb
+	{
+		hero->setHp(hero->getHp()/2);
+		hero->setSpeed(hero->getSpeed()*2);
+		hero->setAtkSpeed(hero->getAtkSpeed()*2);
+		hero->setAtkHateValue(hero->getAtkHateValue()*3);
+		break;
+	}
+
+	case 4002://skill_zl
+	{
+		Role_Ptr initTarget = hero->getAttackTarget();
+		std::list<Role_Ptr> list = hero->getLayer()->getRolesArray();
+		for(auto it = list.begin();it!=list.end();it++){
+			if((**it)->getRoleType() == Role::ROLE_TYPE_HERO){
+				hero->setAttackTarget(*it);
+				hero->sendBullet();
+			}
+		}
+		hero->setAttackTarget(initTarget);
+		break;
+	}
+
+	case 4003://skill_ld
+	{
+		hero->setAtk(hero->getAtk()*2);
+		hero->setBulletSpeed(hero->getBulletSpeed()*2);
+		break;
+	}
+	default:
+		break;
+	}
+}//通过switch..case就可以修改每个英雄的属性
+
+void Role::runSkillEffect(int id,int loop){
+	Sprite* sp = Sprite::create("Skill/null.png");
+	sp->setAnchorPoint(Point(0.5f,0));
+	sp->setPosition(0,0);
+	this->addChild(sp,10);
+	Animate* animate = EffectUtil::getInstance()->getSkillEffectById(id,loop);
+	CallFunc* call = CallFunc::create([=](){sp->removeFromParentAndCleanup(true);});
+	Sequence* action = Sequence::create(animate,call,NULL);
+	sp->runAction(action);
+}//技能特效 Hero类型里的函数
+
+void Hero::skill(){ 
+runSkillEffect(m_skill.begin_e); 
+runStateEffect(m_skill.state_e);
+ SkillImpl impl;
+ impl.runSkill(m_skill.id,this); 
+}//skill接口的实现
+
+void Role::injured(int effect,int damage){
+ runSkillEffect(effect); 
+}//击中特效
+
+void Hero::update_state(float dt){
+	m_state_lastTime += dt;
+	if(m_state_lastTime > m_skill.lastTime){
+		if(skilling){
+			m_state_sprite->removeFromParentAndCleanup(true);
+			m_state_sprite = nullptr;
+			recover();
+		}
+		skilling = false;
+		m_state_lastTime = 0;
+	}
+}//持续时间的实现，时间到了属性回到初始
+
+void updateCD(float delta);
+ Label* cdTime;
+bool Skill::init(Hero* h){
+	m_hero = h;
+	skillIcon = ui::Button::create("Skill/" + h->getSkill().icon);
+	skillIcon->addTouchEventListener(this,toucheventselector(Skill::onTouchDown));
+	this->addChild(skillIcon);
+
+	int cd = m_hero->skillCD;
+	cdTime = Label::create(__String::createWithFormat("%d",cd)->getCString(),"Arial",30);
+	this->addChild(cdTime);
+	if(cd == 0){
+		cdTime->setVisible(false);
+	}
+
+	this->schedule(schedule_selector(Skill::updateCD),1.0f);
+
+	return true;
+}//技能剩下多长时间
+
+void Hero::update_skill_cd(float dt){
+ if(skillCD <= 0){ canUseSkill = true; skillCD = 0; 
+}
+else{
+ skillCD -= dt; }
+ }
