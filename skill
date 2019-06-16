@@ -1,0 +1,41 @@
+void SpriteHero::skillst()
+{
+
+cooldowning_compare = 1;
+if (!state_estimation(1, 0, 1))
+return;
+if (!Mana_cost(1))
+{
+return;
+}
+cooldowning1 = 1;
+spell_judge = 1;
+this->self_strengthen(10, 15, "RMP", 30, "ATKM");
+animate = Animate::create(AnimationCache::getInstance()->getAnimation("snow_st"));
+if (move_judge == 1)//rbrflblf
+{
+animate_one = Animate::create(AnimationCache::getInstance()->getAnimation("snow_rb"));
+}
+else if (move_judge == 2)
+{
+animate_one = Animate::create(AnimationCache::getInstance()->getAnimation("snow_rf"));
+}
+else if (move_judge == 3)
+{
+animate_one = Animate::create(AnimationCache::getInstance()->getAnimation("snow_lb"));
+}
+else if (move_judge == 4)
+{
+animate_one = Animate::create(AnimationCache::getInstance()->getAnimation("snow_lf"));
+}
+if (stop_judge == 0)
+{
+actionManager->removeAllActionsFromTarget(this);
+this->runAction(Sequence::create(Repeat::create(animate,1), Repeat::create(animate_one,1000),nullptr));
+}
+else
+this->runAction(Repeat::create(animate, 1));
+//m_hero->runAction(Repeat::create(animate, 1));
+//m_hero->scheduleOnce(schedule_selector(SpriteHero::judge_action), Repeat::create(animate, 1)->getDuration());
+// m_hero->runAction(Repeat::create(animate, 1));
+}
