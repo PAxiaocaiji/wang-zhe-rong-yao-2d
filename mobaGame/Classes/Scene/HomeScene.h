@@ -1,10 +1,10 @@
 #pragma once
 #include<cocos2d.h>
-#include<extensions/cocos-ext.h>
 #include<SimpleAudioEngine.h>
+#include"ChoosingScene.h"
 
 USING_NS_CC;
-USING_NS_CC_EXT;
+
 using namespace CocosDenshion;
 
 class HomeLayer :public Layer

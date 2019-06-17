@@ -10,7 +10,10 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\game">
+    <Filter Include="src\myu">
+      <UniqueIdentifier>{9f805e96-debc-4607-8841-d427a001c9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gameData">
       <UniqueIdentifier>{2e7ffd67-caf4-426d-bbc8-792091981fda}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -30,7 +33,13 @@
     <ClCompile Include="..\Classes\Scene\ChoosingScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
+    <ClCompile Include="..\Classes\Scene\GameScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\myu\myu.cpp">
+      <Filter>src\myu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\EndScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +59,16 @@
     <ClInclude Include="..\Classes\Scene\ChoosingScene.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
+    <ClInclude Include="..\Classes\Scene\GameScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\myu\GameData.h">
+      <Filter>src\gameData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\myu\myu.h">
+      <Filter>src\myu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\EndScene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

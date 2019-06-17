@@ -1,10 +1,9 @@
 #include"HomeScene.h"
-#include<extensions/cocos-ext.h>
 #include<SimpleAudioEngine.h>
 #include"Setting.h"
+#include"GameScene.h"
 
 USING_NS_CC;
-USING_NS_CC_EXT;
 
 Scene* HomeLayer::createScene()
 {
@@ -32,7 +31,7 @@ bool HomeLayer::init()
 		Sprite::create("start.png"),
 		Sprite::create("start1.png"),
 		[&](Ref*ref) {
-		//Director::getInstance()->replaceScene();
+		Director::getInstance()->replaceScene(Choose::createScene());
 	}
 	);
 
@@ -118,7 +117,7 @@ void HomeLayer::onExit()
 void HomeLayer::onEnterTransitionDidFinish()
 {
 	Layer::onEnterTransitionDidFinish();
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("sound/bg1.mp3",true);
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("sound/bg2.mp3",true);
 	bgMusic_is_paused = false;
 }
 
