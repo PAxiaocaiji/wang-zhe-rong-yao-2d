@@ -4,18 +4,18 @@ void  Helloworld::connectServer() {
 	cSocket.Init();
 	cSocket.Create(AF - INET, SOCK - STREAM, 0);
 
-	const char* ip = ¡±111.11.11.111¡±;
+	const char* ip = â€111.11.11.111â€;
 	Int port = 7777;
 
 	bool  result = cSocket.Connect(ip, port);
 	If(result) {
-		Log(¡°connect to server suc !¡±);
+		Log(â€œconnect to server suc !â€);
 	}
 
 	   else {
-	   log(¡°can not connect to server ¡°);
+	   log(â€œcan not connect to server â€œ);
 		  }
-}//Á¬½Ó·şÎñÆ÷
+}//è¿æ¥æœåŠ¡å™¨
 
 
 
@@ -31,14 +31,14 @@ void  Helloworld::connectServer() {
 			catch (Exception  e) {
 		}
 
-		System.out.println(¡°·şÎñÆ÷¿ªÊ¼¡±);
+		System.out.println(â€œæœåŠ¡å™¨å¼€å§‹â€);
 		While(true) {
 			Try{
 			   Socket  so = ss.accept();
 			 if (so = null) {
 				   Continue;
 }
-					 System.out.println(¡°¿Í»§¶ËÒÑÁ¬½Ó¡±£©£»
+					 System.out.println(â€œå®¢æˆ·ç«¯å·²è¿æ¥â€ï¼‰ï¼›
 					 clientThread,addClient(so);
 						 }
 						 catch (IOException  e) {
@@ -47,7 +47,7 @@ void  Helloworld::connectServer() {
 		}
 	}
 }
-		 }//·şÎñ¶Ë
+		 }//æœåŠ¡ç«¯
 
 
 		 Public  class ClientThread   extends  Thread {
@@ -59,12 +59,12 @@ void  Helloworld::connectServer() {
 				 putputStream  os;
 				 try {
 					 os = so.getOutputStream();
-					 String  send = ¡±\¡±cmd\¡±:1
-				 }¡±;
-				 os.write(send.getBytes(¡°UTF - 8))£»
-					 £ıcatch(IOException  e) {
+					 String  send = â€\â€cmd\â€:1
+				 }â€;
+				 os.write(send.getBytes(â€œUTF - 8))ï¼›
+					 ï½catch(IOException  e) {
 				 }
-			 }//·¢ËÍµÇÂ¼ÏûÏ¢
+			 }//å‘é€ç™»å½•æ¶ˆæ¯
 
 			 Public void run() {
 				 while (true) {
@@ -79,7 +79,7 @@ void  Helloworld::connectServer() {
 							 Is.read(buff);
 
 							 String read = new String(buff);
-							 System.out.println(¡°½ÓÊÕµ½µÄÊı¾İ£º¡± + read);
+							 System.out.println(â€œæ¥æ”¶åˆ°çš„æ•°æ®ï¼šâ€ + read);
 						 }
 						 Sleep(10);
 					 }
@@ -89,10 +89,10 @@ void  Helloworld::connectServer() {
 					 }
 				 }
 			 }
-		 }//½ÓÊÜ¿Í»§Êı¾İ
+		 }//æ¥å—å®¢æˆ·æ•°æ®
 
-#include ¡° cocos2d.h¡±
-#include ¡°ODSocket\ODSocket.h¡±
+#include â€œ cocos2d.hâ€
+#include â€œODSocket\ODSocket.hâ€
 		 USING_NS_CC;
 
 #define  MAX_LEN  512
@@ -113,7 +113,7 @@ void  Helloworld::connectServer() {
 			bool  connectServer();
 			void  recvData();
 		 };
-#endif//Êı¾İ´¦Àí
+#endif//æ•°æ®å¤„ç†
 
 
 
